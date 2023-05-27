@@ -7,23 +7,59 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
+class User(Base):
+    __tablename__ = 'user'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    name = Column(String(30), nullable=False)
+    email = Column(String(50), nullable=False)
+    password = Column(String(50), nullable=False)
+    subscriptionDate = Column(String(20))
 
-class Address(Base):
-    __tablename__ = 'address'
+    favorite_planets = relationship("FavoritePlanets")
+    favorite_characters = relationship("FavoriteCharacters")
+
+
+class FavoritePlanets(Base):
+    __tablename__ = 'favorite_planets'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    total = Column(Integer)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    character_id = Column(Integer, ForeignKey('planets.id'))
+
+class FavoriteCahracters(Base):
+    __tablename__ = 'favorite_characters'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    total = Column(Integer)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    character_id = Column(Integer, ForeignKey('characters.id'))
+
+class Planets(Base):
+    __tablename__ = 'planets'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    description = Column(String(50))
+    population = Column(Integer)
+    climate = Column(String(20))
+    terrain = Column(String(20))
+    orbitalPeriod = Column(Integer)
+
+class Characters(Base):
+    __tablename__ = 'characters'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    height = Column(Integer)
+    mass = Column(Integer)
+    hairColor = Column(String(20))
+    skinColor = Column(String(20))
+    eyeColor = Column(String(20))
+
+
 
     def to_dict(self):
         return {}
